@@ -1,5 +1,6 @@
 package t01;
 
+import java.io.*;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -11,18 +12,44 @@ public class CrazyLogger {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-YYYY : hh-mm");
 
     private StringBuilder storage = new StringBuilder();
-
+    private PrintWriter destination;
     private Locale loggerLocale;
 
 
-    public CrazyLogger(Locale loggerLocale) {
+    public CrazyLogger(OutputStream destination, Locale loggerLocale) {
+        this.destination = new PrintWriter(new BufferedWriter(new OutputStreamWriter(destination)));
         this.loggerLocale = loggerLocale;
     }
 
-    public CrazyLogger() {
-        this.loggerLocale = Locale.getDefault();
+    public CrazyLogger(Writer destination, Locale loggerLocale) {
+        this.destination = new PrintWriter(new BufferedWriter(destination));
+        this.loggerLocale = loggerLocale;
     }
 
+    public CrazyLogger(OutputStream destination) {
+        this(destination, Locale.getDefault());
+    }
+
+    public CrazyLogger(Writer destination) {
+        this(destination, Locale.getDefault());
+    }
+
+    public CrazyLogger(Locale loggerLocale) {
+        this(System.out, loggerLocale);
+    }
+
+    public CrazyLogger() {
+        this(System.out, Locale.getDefault());
+    }
+
+
+    public void setDestination(OutputStream destination) {
+        this.destination = new PrintWriter(new BufferedWriter(new OutputStreamWriter(destination)));
+    }
+
+    public void setDestination(Writer destination) {
+        this.destination = new PrintWriter(new BufferedWriter(destination));
+    }
 
     public Locale getLoggerLocale() {
         return loggerLocale;
