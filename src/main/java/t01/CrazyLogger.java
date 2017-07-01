@@ -10,8 +10,10 @@ import java.util.Locale;
 public class CrazyLogger {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-YYYY : hh-mm");
 
-    private final StringBuilder storage = new StringBuilder();
+    private StringBuilder storage = new StringBuilder();
+
     private Locale loggerLocale;
+
 
     public CrazyLogger(Locale loggerLocale) {
         this.loggerLocale = loggerLocale;
@@ -21,12 +23,18 @@ public class CrazyLogger {
         this.loggerLocale = Locale.getDefault();
     }
 
+
     public Locale getLoggerLocale() {
         return loggerLocale;
     }
 
     public void setLoggerLocale(Locale loggerLocale) {
         this.loggerLocale = loggerLocale;
+    }
+
+
+    public void reset() {
+        storage = new StringBuilder();
     }
 
     public void log(String message) {
