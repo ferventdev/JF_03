@@ -1,9 +1,13 @@
 package t01;
 
+import com.sun.istack.internal.NotNull;
+import lombok.NonNull;
+
 import java.io.*;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Scanner;
 
 /**
  * Created by Aleksandr Shevkunenko on 01.07.2017.
@@ -16,12 +20,12 @@ public class CrazyLogger {
     private Locale loggerLocale;
 
 
-    public CrazyLogger(OutputStream destination, Locale loggerLocale) {
+    public CrazyLogger(@NonNull OutputStream destination, @NonNull Locale loggerLocale) {
         this.destination = new PrintWriter(new BufferedWriter(new OutputStreamWriter(destination)));
         this.loggerLocale = loggerLocale;
     }
 
-    public CrazyLogger(Writer destination, Locale loggerLocale) {
+    public CrazyLogger(@NonNull Writer destination, @NonNull Locale loggerLocale) {
         this.destination = new PrintWriter(new BufferedWriter(destination));
         this.loggerLocale = loggerLocale;
     }
@@ -69,4 +73,20 @@ public class CrazyLogger {
         String record = String.format(loggerLocale, "%s - %s%n", timestamp, message);
         storage.append(record);
     }
+
+    public void pickFullLog() {
+        destination.print(storage);
+    }
+
+    public void pickLogLines(String phrase) {
+        try (Scanner reader = new Scanner(storage.toString())) {
+            String line;
+            while (reader.hasNextLine()) {
+                line = reader.nextLine();
+                if (line.contains(phrase)) destination.print(line);
+            }
+        }
+    }
+
+
 }
