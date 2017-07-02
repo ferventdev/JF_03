@@ -5,6 +5,7 @@ import lombok.NonNull;
 
 import java.io.*;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Scanner;
@@ -47,6 +48,14 @@ public class CrazyLogger {
     }
 
 
+    StringBuilder getStorage() {
+        return storage;
+    }
+
+    PrintWriter getDestination() {
+        return destination;
+    }
+
     public void setDestination(OutputStream destination) {
         this.destination = new PrintWriter(new BufferedWriter(new OutputStreamWriter(destination)));
     }
@@ -69,13 +78,14 @@ public class CrazyLogger {
     }
 
     public void log(String message) {
-        String timestamp = FORMATTER.format(Instant.now());
+        String timestamp = FORMATTER.format(LocalDateTime.now());
         String record = String.format(loggerLocale, "%s - %s%n", timestamp, message);
         storage.append(record);
     }
 
     public void pickFullLog() {
         destination.print(storage);
+        destination.flush();
     }
 
     public void pickLogLines(String phrase) {

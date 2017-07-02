@@ -10,6 +10,10 @@ import static org.junit.Assert.*;
 public class CrazyLoggerTest {
     @Test
     public void crazyLoggerTest() throws Exception {
+        CrazyLogger logger = new CrazyLogger();
 
+        for (int i = 1; i <= 20; i++) logger.log("This is message #" + i + ".");
+
+        logger.pickFullLog();
     }
 }
