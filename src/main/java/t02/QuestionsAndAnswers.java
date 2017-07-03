@@ -84,7 +84,7 @@ public class QuestionsAndAnswers {
         qa.setLanguage((reply == 1) ? new Locale("en", "US") : new Locale("ru", "RU"));
 
         for (String allQuestions = qa.getQuestions();;) {
-            System.out.printf(qa.getLanguage(), allQuestions);
+            System.out.print(allQuestions);
             reply = qa.getEnteredNumber(7);
             if (reply == 0) return;
             System.out.println(qa.getAnswer(reply));
