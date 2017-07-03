@@ -93,8 +93,9 @@ public class CrazyLogger {
             String line;
             while (reader.hasNextLine()) {
                 line = reader.nextLine();
-                if (line.contains(phrase)) destination.print(line);
+                if (line.contains(phrase)) destination.println(line);
             }
+            destination.flush();
         }
     }
 }
