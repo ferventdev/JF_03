@@ -41,7 +41,6 @@ public class ImageLinks {
         List<Integer> refs = new ArrayList<>();
         String regexp = "<img\\s+[^<>]*src=\"(([^\"]+)/([^/\\d\"\\.]+)(\\d+)\\.(jpg|png|bmp|gif))\"[^<>]*>";
         Matcher m = Pattern.compile(regexp).matcher(text);
-//        System.out.println(m.groupCount());
         while (m.find()) {
             try {
                 refs.add(Integer.parseUnsignedInt(m.group(4)));
@@ -58,6 +57,22 @@ public class ImageLinks {
             if (numbers.get(i + 1) - numbers.get(i) != 1) return false;
         }
         return true;
+    }
+
+    private static List<String> getAllSentencesWithImageRefs(String text) {
+        List<String> refs = new ArrayList<>();
+        String regexp = "((<div> </div>)|(<p>(Рис.\\s*\\d+\\s+[^\\.]*\\.).*</p>))";
+        Matcher m = Pattern.compile(regexp).matcher(text);
+        while (m.find()) {
+            try {
+                System.out.println(m.group());
+                refs.add(m.group());
+            } catch(NumberFormatException e) {
+                e.printStackTrace();
+                break;
+            }
+        }
+        return refs;
     }
 
     public static void main(String[] args) {
@@ -79,5 +94,6 @@ public class ImageLinks {
 
         System.out.println(message);
 
+        getAllSentencesWithImageRefs(text);
     }
 }
