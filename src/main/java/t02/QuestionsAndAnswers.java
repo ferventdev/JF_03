@@ -10,10 +10,12 @@ import java.util.Scanner;
  * Created by Aleksandr Shevkunenko on 03.07.2017.
  */
 public class QuestionsAndAnswers {
-    private final Scanner reader = new Scanner(System.in);
+    final Scanner reader = new Scanner(System.in);
+
     private Locale language;
     private ResourceBundle questions;
     private ResourceBundle answers;
+
 
     public void setLanguage(Locale language) {
         this.language = language;
@@ -80,13 +82,19 @@ public class QuestionsAndAnswers {
 
         QuestionsAndAnswers qa = new QuestionsAndAnswers();
         int reply = qa.getEnteredNumber(2);
-        if (reply == 0) return;
+        if (reply == 0) {
+            qa.reader.close();
+            return;
+        }
         qa.setLanguage((reply == 1) ? new Locale("en", "US") : new Locale("ru", "RU"));
 
         for (String allQuestions = qa.getQuestions();;) {
             System.out.print(allQuestions);
             reply = qa.getEnteredNumber(7);
-            if (reply == 0) return;
+            if (reply == 0) {
+                qa.reader.close();
+                return;
+            }
             System.out.println(qa.getAnswer(reply));
             System.out.println();
         }

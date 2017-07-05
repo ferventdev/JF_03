@@ -1,5 +1,6 @@
 package t03;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -14,8 +15,15 @@ public class ImageLinks {
         return new String(Files.readAllBytes(Paths.get(filename)), cs);
     }
 
-    private static Charset getHtmlEncodingCharset(String filename) throws IOException {
-        Files.lines(Paths.get(filename), Charset.defaultCharset());
+    private static Charset getHtmlEncodingCharset(String filename) {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(filename), Charset.defaultCharset())) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
