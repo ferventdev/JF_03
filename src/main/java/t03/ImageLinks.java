@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,18 +37,47 @@ public class ImageLinks {
         return Charset.defaultCharset();
     }
 
+    private static List<Integer> getAllImageReferences(String text) {
+        List<Integer> refs = new ArrayList<>();
+        String regexp = "<img\\s+[^<>]*src=\"(([^\"]+)/([^/\\d\"\\.]+)(\\d+)\\.(jpg|png|bmp|gif))\"[^<>]*>";
+        Matcher m = Pattern.compile(regexp).matcher(text);
+//        System.out.println(m.groupCount());
+        while (m.find()) {
+            try {
+                refs.add(Integer.parseUnsignedInt(m.group(4)));
+            } catch(NumberFormatException e) {
+                e.printStackTrace();
+                break;
+            }
+        }
+        return refs;
+    }
+
+    private static boolean checkImageRefsAreConsequent(List<Integer> numbers) {
+        for (int i = 0, n = numbers.size() - 1; i < n; i++) {
+            if (numbers.get(i + 1) - numbers.get(i) != 1) return false;
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
         String filename = "src\\main\\resources\\Handling_task_attachment.html";
 
         Charset charset = getHtmlEncodingCharset(filename);
-        System.out.println(charset);
 
-//        String text = null;
-//        try {
-//            text = readFile(filename, charset);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        System.out.println(text);
+        String text = null;
+        try {
+            text = readFile(filename, charset);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        String message = checkImageRefsAreConsequent(getAllImageReferences(text)) ?
+            "The author reference images consequently." :
+            "The author does not reference images consequently.";
+
+        System.out.println(message);
+
     }
 }
