@@ -19,11 +19,12 @@ public class ImageLinks {
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filename), Charset.defaultCharset())) {
             String line = null;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                return null;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public static void main(String[] args) {

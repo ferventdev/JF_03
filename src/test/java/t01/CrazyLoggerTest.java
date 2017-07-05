@@ -22,7 +22,7 @@ public class CrazyLoggerTest {
         logger.pickFullLog();
         assertEquals(logger.getStorage().toString(), logfile.toString());
 
-        logfile.close();
+        logger.close();
     }
 
     @Test
@@ -39,6 +39,6 @@ public class CrazyLoggerTest {
         String[] lines = logger.getStorage().toString().split("\\n");
         assertThat(logfile.toString().trim(), is(lines[4].trim()));
 
-        logfile.close();
+        logger.close();
     }
 }

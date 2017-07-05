@@ -77,6 +77,11 @@ public class CrazyLogger {
         storage = new StringBuilder();
     }
 
+    public void close() {
+        destination.flush();
+        destination.close();
+    }
+
     public void log(String message) {
         String timestamp = FORMATTER.format(LocalDateTime.now());
         String record = String.format(loggerLocale, "%s - %s%n", timestamp, message);
