@@ -1,5 +1,7 @@
 package t03;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,12 +63,11 @@ public class ImageLinks {
 
     private static List<String> getAllSentencesWithImageRefs(String text) {
         List<String> refs = new ArrayList<>();
-        String regexp = "((<div> </div>)|(<p>(Рис.\\s*\\d+\\s+[^\\.]*\\.).*</p>))";
+        String regexp = "((<div>\\s*)(<p>\\s*)|([!\\.\\?]\\s+))([A-ZА-Я][^\\.]*(([Рр]?ис.)|([Рр]?исун[а-я]{2,3}))\\s*\\d+[^!\\.\\?]*[!\\.\\?])\\s*((</p>)|(</div>)|(</span>)|([A-ZА-Я]))";
         Matcher m = Pattern.compile(regexp).matcher(text);
         while (m.find()) {
             try {
-                System.out.println(m.group());
-                refs.add(m.group());
+                refs.add(m.group(5));
             } catch(NumberFormatException e) {
                 e.printStackTrace();
                 break;
@@ -92,8 +93,21 @@ public class ImageLinks {
             "The author reference images consequently." :
             "The author does not reference images consequently.";
 
-        System.out.println(message);
+        System.out.println(message + "\n");
 
-        getAllSentencesWithImageRefs(text);
+        System.out.println("Here are sentences with image references:");
+        List<String> lines = getAllSentencesWithImageRefs(text);
+
+        String regex = ".*(([Рр]и[с].)|([Рр]исун[а-я]+))\\s*\\d+.*";
+        Pattern p = Pattern.compile(regex);
+        for (String line : lines) {
+            System.out.println(line);
+            if (!p.matcher(line).find()) {
+                System.out.println("This line doesn't contain an image reference:");
+                System.out.println(line);
+                break;
+            }
+            System.out.println("--------------------------------------------------------------------------");
+        }
     }
 }
